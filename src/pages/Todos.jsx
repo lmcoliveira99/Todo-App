@@ -1,30 +1,22 @@
-import { useParams } from "react-router-dom";
-import data from "../data/data.json";
 import { useState } from "react";
+import TodoList from "../components/TodoList";
+import Create from "../components/Create";
 
 function Todos() {
-  const { id } = useParams(); // Get the id from the route parameters
-  const [doTask, setTask] = useState(data.find(task => task.id === parseInt(id))); // Use the id to find the corresponding task
+  const [tasks, setTasks] = useState([]);
 
-  const handleInputChange = (e) => {
-    setTask(e.target.value);
+  const addTask = (newTask) => {
+    const updatedTasks = [...tasks, newTask];
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
   return (
-    <div className="App text-center">
-      <form className="App text-center"> 
-        <input
-          type="text"
-          required
-          value={doTask.text}
-          onChange={handleInputChange}
-          placeholder="Enter Task"
-        />
-      </form>
-      <div className="App text-center">
-        <h1>{doTask.text}</h1>
-      </div>
+    <div className="max-w-md mx-auto mt-16 bg-gradient-to-b from-light-blue-300 to-light-blue-400 p-8 rounded-lg shadow-lg">
+      <TodoList tasks={tasks} />
+      <Create onTaskAdd={addTask} />
     </div>
   );
 }
+
 export default Todos;
